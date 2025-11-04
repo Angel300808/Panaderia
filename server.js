@@ -5,21 +5,22 @@ const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const DB_HOST = 'localhost';
+const DB_USER = 'root';
+const DB_PASSWORD = 'n0m3l0';
+const DB_DATABASE = 'panaderia_la_desesperanza';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// --- Middleware ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- CORS ---
 app.use(cors({
   origin: true,
   credentials: true
 }));
 
-// --- Sesiones ---
 app.use(session({
   secret: 'tu-secreto-muy-secreto-para-panaderia',
   resave: false,
@@ -35,13 +36,13 @@ app.use(session({
 // Sirve la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Config DB ---
-const dbConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: 'n0m3l0', // <-- REVISA TU CONTRASEÑA
-  database: 'panaderia_la_desesperanza'
+  const dbConfig = {
+  host: DB_HOST,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_DATABASE
 };
+
 
 // --- Middleware autenticación (protege rutas de admin) ---
 const requireAuth = (req, res, next) => {
