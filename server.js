@@ -5,10 +5,7 @@ const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const path = require('path');
-const DB_HOST = 'localhost';
-const DB_USER = 'root';
-const DB_PASSWORD = 'n0m3l0';
-const DB_DATABASE = 'panaderia_la_desesperanza';
+
 
 const app = express();
 const port = process.env.PORT || 3000;
