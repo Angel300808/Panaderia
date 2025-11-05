@@ -29,8 +29,6 @@ app.use(session({
   }
 }));
 
-// --- Archivos estáticos ---
-// Sirve la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
   const dbConfig = {
@@ -41,16 +39,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 };
 
 
-// --- Middleware autenticación (protege rutas de admin) ---
 const requireAuth = (req, res, next) => {
   if (!req.session.userId) {
     return res.status(401).json({ error: 'Acceso no autorizado. Inicia sesión.' });
   }
-  // Opcional: Podrías chequear req.session.role === 'admin' aquí
   next();
 };
 
-// -------------------- AUTENTICACIÓN (CORREGIDO) --------------------
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
@@ -87,7 +82,6 @@ app.post('/login', async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ error: 'Credenciales inválidas.' });
 
-    // --- ¡ESTO ES LO IMPORTANTE! ---
     req.session.userId = user.id;
     req.session.username = user.username;
     req.session.role = (user.username === 'admin') ? 'admin' : 'cliente'; // Asigna rol
@@ -127,9 +121,7 @@ app.post('/logout', (req, res) => {
 
 
 
-// REEMPLAZA ESTA RUTA COMPLETA EN server.js
 
-/// READ (Público) - VERSIÓN CON MEJOR DEBUGGING
 app.get('/api/productos', async (req, res) => {
   let connection;
   try {
@@ -140,10 +132,10 @@ app.get('/api/productos', async (req, res) => {
       'SELECT id, nombre, descripcion, precio, stock, id_categoria, imagen_url FROM productos'
     );
     
-    console.log('✅ Productos obtenidos:', rows.length); // Para debug
+    console.log('Productos obtenidos:', rows.length); // Para debug
     res.json(rows);
   } catch (err) {
-    console.error("❌ ERROR EN GET /api/productos:", err.message);
+    console.error(" ERROR EN GET /api/productos:", err.message);
     console.error("Detalles completos:", err);
     res.status(500).json({ 
       error: 'Error al obtener productos.',
@@ -154,7 +146,6 @@ app.get('/api/productos', async (req, res) => {
   }
 });
 
-// CREATE (Protegido)
 app.post('/api/productos', requireAuth, async (req, res) => {
   const { nombre, descripcion, precio, stock, id_categoria, imagen_url } = req.body;
   if (!nombre || !precio || precio <= 0 || stock == null || stock < 0 || !id_categoria)
@@ -176,7 +167,6 @@ app.post('/api/productos', requireAuth, async (req, res) => {
   }
 });
 
-// UPDATE (Protegido)
 app.put('/api/productos/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const { nombre, descripcion, precio, stock, id_categoria, imagen_url } = req.body;
@@ -199,7 +189,6 @@ app.put('/api/productos/:id', requireAuth, async (req, res) => {
   }
 });
 
-// DELETE (Protegido)
 app.delete('/api/productos/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   let connection;
@@ -217,16 +206,11 @@ app.delete('/api/productos/:id', requireAuth, async (req, res) => {
   }
 });
 
-// AÑADE ESTA RUTA COMPLETA en server.js
-
-// -------------------- PEDIDOS (NUEVO) --------------------
-// Esta ruta crea un pedido a partir del carrito de la sesión
 app.post('/api/pedidos', requireAuth, async (req, res) => {
   
   const carritoSession = req.session.carrito || [];
   const id_cliente = req.session.userId;
 
-  // 1. Validar que el carrito no esté vacío
   if (carritoSession.length === 0) {
     return res.status(400).json({ error: 'El carrito está vacío.' });
   }
@@ -234,10 +218,8 @@ app.post('/api/pedidos', requireAuth, async (req, res) => {
   let connection;
   try {
     connection = await mysql.createConnection(dbConfig);
-    // ¡Iniciamos una transacción!
     await connection.beginTransaction();
 
-    // 2. Obtener los precios REALES de la BD (nunca confiar en la sesión para $)
     const ids = carritoSession.map(item => item.id_producto);
     const placeholders = ids.map(() => '?').join(',');
     
@@ -274,38 +256,31 @@ app.post('/api/pedidos', requireAuth, async (req, res) => {
       });
     }
 
-    // 4. Insertar en la tabla 'Pedidos'
     const [pedidoResult] = await connection.execute(
       'INSERT INTO Pedidos (id_cliente, total, estado) VALUES (?, ?, ?)',
       [id_cliente, total, 'completado'] // Asumimos 'completado' de inmediato
     );
     const id_pedido = pedidoResult.insertId;
 
-    // 5. Insertar en 'Detalle_Pedidos' y actualizar stock
     for (const detalle of detallesPedido) {
-      // Insertar el detalle
       await connection.execute(
         'INSERT INTO Detalle_Pedidos (id_pedido, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)',
         [id_pedido, detalle.id_producto, detalle.cantidad, detalle.precio_unitario]
       );
       
-      // Actualizar el stock
       await connection.execute(
         'UPDATE Productos SET stock = stock - ? WHERE id = ?',
         [detalle.cantidad, detalle.id_producto]
       );
     }
 
-    // 6. ¡Todo salió bien! Confirmamos la transacción
     await connection.commit();
 
-    // 7. Limpiamos el carrito de la sesión
     req.session.carrito = [];
 
     res.status(201).json({ message: 'Pedido realizado con éxito.', id_pedido: id_pedido });
 
   } catch (err) {
-    // 8. ¡Algo salió mal! Revertimos la transacción
     if (connection) await connection.rollback();
     
     console.error("Error al procesar pedido:", err.message);
@@ -318,7 +293,6 @@ app.post('/api/pedidos', requireAuth, async (req, res) => {
 });
 
 
-// -------------------- CARRITO (CORREGIDO) --------------------
 
 app.post('/api/carrito', (req, res) => {
   const { id_producto, cantidad } = req.body;
@@ -392,15 +366,11 @@ app.delete('/api/carrito/:id_producto', (req, res) => {
 });
 
 
-// -------------------- RUTA FINAL (SPA / frontend) --------------------
-// Captura cualquier otra ruta y envía el index.html
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 
-// -------------------- USUARIO ADMIN POR DEFECTO --------------------
-// -------------------- USUARIO ADMIN POR DEFECTO --------------------
 (async () => {
   try {
     const conn = await mysql.createConnection(dbConfig);
@@ -408,7 +378,7 @@ app.use((req, res) => {
     if (rows.length === 0) {
       const hash = await bcrypt.hash('1234', 10); // Contraseña por defecto es 1234
       await conn.execute('INSERT INTO Usuarios (username, password_hash) VALUES (?, ?)', ['admin', hash]);
-      console.log('👤 Usuario "admin" creado automáticamente (contraseña: 1234)');
+      console.log(' Usuario "admin" creado automáticamente (contraseña: 1234)');
     }
     await conn.end();
   } catch (err) {
@@ -416,7 +386,6 @@ app.use((req, res) => {
   }
 })();
 
-// -------------------- INICIAR SERVIDOR --------------------
 app.listen(port, () => {
-  console.log(`✅ Servidor corriendo en http://localhost:${port}`);
+  console.log(` Servidor corriendo en http://localhost:${port}`);
 });
