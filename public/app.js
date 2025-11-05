@@ -1,8 +1,6 @@
-// public/app.js
 
 document.addEventListener("DOMContentLoaded", () => {
   
-  // --- Selectores de Autenticación ---
   const regUsername = document.getElementById("reg-username");
   const regPassword = document.getElementById("reg-password");
   const btnRegister = document.getElementById("btn-register");
@@ -15,21 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const authMsg = document.getElementById("auth-msg");
   const welcomeMsg = document.getElementById("welcome-msg");
 
-  // --- Selectores de Secciones ---
   const authSection = document.getElementById("auth-section");
   const welcomeSection = document.getElementById("welcome-section");
   const productosSection = document.getElementById("productos-section");
   const carritoSection = document.getElementById("carrito-section");
   const adminSection = document.getElementById("admin-section"); 
 
-  // --- Contenedores de Cliente ---
   const productosCont = document.getElementById("productos");
   const carritoUl = document.getElementById("carrito");
 
   const btnRealizarPedido = document.getElementById("btnRealizarPedido");
   const pedidoMsg = document.getElementById("pedido-msg");
 
-  // --- Selectores de Admin (CRUD) ---
   const tablaProductosAdmin = document.getElementById("tabla-productos-admin");
   const productoModal = document.getElementById("productoModal");
   const modalCloseBtn = document.querySelector(".modal-close-btn");
@@ -41,10 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   let idProductoEditar = null; 
 
-  
-  // =============================================
-  // FUNCIONES DE AUTENTICACIÓN
-  // =============================================
 
   const registrarUsuario = async () => {
     const username = regUsername.value;
@@ -61,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       
       if (res.ok) {
-        authMsg.textContent = "✅ " + data.message + " Ahora puedes iniciar sesión.";
+        authMsg.textContent = " " + data.message + " Ahora puedes iniciar sesión.";
         authMsg.style.color = "green";
         regUsername.value = "";
         regPassword.value = "";
@@ -69,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(data.error);
       }
     } catch (err) {
-      authMsg.textContent = "❌ Error: " + err.message;
+      authMsg.textContent = " Error: " + err.message;
       authMsg.style.color = "#d9534f";
     }
   };
@@ -94,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(data.error);
       }
     } catch (err) {
-      authMsg.textContent = "❌ Error: " + err.message;
+      authMsg.textContent = " Error: " + err.message;
       authMsg.style.color = "#d9534f";
     }
   };
@@ -104,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await fetch("/logout", { method: "POST" });
       actualizarUI(false); 
     } catch (err) {
-      authMsg.textContent = "❌ Error al cerrar sesión.";
+      authMsg.textContent = " Error al cerrar sesión.";
       authMsg.style.color = "#d9534f";
     }
   };
@@ -120,9 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // =============================================
-  // FUNCIONES DE PRODUCTOS Y CARRITO (CLIENTE)
-  // =============================================
 
   const cargarProductos = async () => {
     try {
@@ -242,10 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pedidoMsg.textContent = `❌ Error: ${err.message}`;
   }
 };
-  // =============================================
-  // FUNCIONES DEL ADMIN (CRUD)
-  // =============================================
-
+ 
   const cargarProductosAdmin = async () => {
      try {
       const res = await fetch("/api/productos");
@@ -388,10 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   };
 
-  // =============================================
-  // LÓGICA DE UI (QUÉ MOSTRAR/OCULTAR)
-  // =============================================
-
+ 
   function actualizarUI(estaLogueado, username = "", role = "cliente") {
     if (estaLogueado) {
       // Ocultar formularios de login/registro
@@ -404,7 +386,6 @@ document.addEventListener("DOMContentLoaded", () => {
       welcomeMsg.textContent = `✅ ¡Hola, ${username}! (Rol: ${role})`;
       welcomeSection.style.display = 'block';
       
-      // --- LÓGICA DE ROLES ---
       if (role === 'admin') {
         adminSection.style.display = 'block'; 
         cargarProductosAdmin(); 
@@ -441,16 +422,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // =============================================
-  // EVENT LISTENERS (ASIGNACIÓN DE BOTONES)
-  // =============================================
-  
-  // --- Autenticación ---
+
   btnRegister.addEventListener("click", registrarUsuario);
   btnLogin.addEventListener("click", iniciarSesion);
   btnLogout.addEventListener("click", cerrarSesion);
 
-  // --- Cliente ---
   productosCont.addEventListener("click", (e) => {
     if (e.target.classList.contains("btn-agregar-carrito")) {
       const id = e.target.dataset.id;
@@ -458,7 +434,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
-  // --- Admin (CRUD) ---
   btnNuevoProducto.addEventListener('click', () => abrirModal(null));
   modalCloseBtn.addEventListener('click', () => productoModal.style.display = 'none');
   btnGuardar.addEventListener('click', guardarProducto);
@@ -466,7 +441,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnRealizarPedido.addEventListener("click", realizarPedido);
   
-  // --- INICIO DE LA APP ---
   checkSession(); // Revisa si ya hay una sesión activa al cargar la página
   
 });
