@@ -1,4 +1,7 @@
+require('dotenv').config();
+
 // server.js
+
 const express = require('express');
 const mysql = require('mysql2/promise');
 const session = require('express-session');
@@ -31,13 +34,13 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-  const dbConfig = {
-  host: DB_HOST,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_DATABASE
+// --- Config DB ---
+const dbConfig = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
 };
-
 
 const requireAuth = (req, res, next) => {
   if (!req.session.userId) {
