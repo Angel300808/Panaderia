@@ -22,7 +22,6 @@ h2 {
   padding-bottom: 5px;
 }
 
-/* --- Contenedores Principales --- */
 section {
   max-width: 700px;
   margin: 20px auto;
@@ -32,7 +31,6 @@ section {
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* --- Autenticación --- */
 #auth-section input[type="text"],
 #auth-section input[type="password"] {
   width: calc(100% - 20px);
@@ -54,7 +52,6 @@ section {
   color: #333;
 }
 
-/* --- Botones --- */
 button {
   background: #d2691e;
   color: white;
@@ -79,7 +76,6 @@ button:hover {
   background-color: #888;
 }
 
-/* --- Productos (Cliente) --- */
 #productos div {
   border: 1px solid #f0f0f0;
   margin: 10px 0;
@@ -140,7 +136,6 @@ button:hover {
   font-size: 1.2em;
 }
 
-/* --- ESTILOS DEL PANEL DE ADMIN (CRUD) --- */
 .btn-success {
   background-color: #28a745;
 }
@@ -189,7 +184,6 @@ button:hover {
   background-color: #c9302c;
 }
 
-/* --- ESTILOS DEL MODAL (CRUD) --- */
 .modal-overlay {
   position: fixed;
   z-index: 1000;
