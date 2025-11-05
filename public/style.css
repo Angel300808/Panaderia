@@ -2,25 +2,25 @@
 
 /* --- RESET BÁSICO Y FUENTES --- */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
-  background: #fdfaf6; /* Fondo crema muy claro */
-  color: #333;
-  line-height: 1.6;
+ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+ margin: 0;
+ background: #fdfaf6; /* Fondo crema muy claro */
+ color: #333;
+ line-height: 1.6;
 }
 
 h1, h2, h3 {
-  color: #8c5a2d; /* Marrón oscuro para títulos */
+ color: #8c5a2d; /* Marrón oscuro para títulos */
 }
 
 h1 {
-  text-align: center;
-  margin-bottom: 30px;
+ text-align: center;
+ margin-bottom: 30px;
 }
 
 h2 {
-  border-bottom: 2px solid #e0c9b0; /* Línea divisoria sutil */
-  padding-bottom: 5px;
+ border-bottom: 2px solid #e0c9b0; /* Línea divisoria sutil */
+ padding-bottom: 5px;
 }
 
 a {
@@ -147,23 +147,23 @@ main.container {
 }
 
 section {
-  max-width: 100%; /* Ajustado para que quepa en el container */
-  margin: 20px 0; /* Separación vertical */
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+ max-width: 100%; /* Ajustado para que quepa en el container */
+ margin: 20px 0; /* Separación vertical */
+ padding: 20px;
+ background: #ffffff;
+ border-radius: 8px;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 /* --- Autenticación --- */
 #auth-section input[type="text"],
 #auth-section input[type="password"] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-sizing: border-box; 
+ width: calc(100% - 20px);
+ padding: 10px;
+ margin: 8px 0;
+ border: 1px solid #ddd;
+ border-radius: 5px;
+ box-sizing: border-box; 
 }
 
 #auth-msg {
@@ -178,18 +178,18 @@ section {
 
 /* --- Botones Genéricos --- */
 button {
-  background: #d2691e; 
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1em;
-  margin-top: 10px;
-  transition: background-color 0.2s ease;
+ background: #d2691e; 
+ color: white;
+ border: none;
+ padding: 10px 15px;
+ border-radius: 6px;
+ cursor: pointer;
+ font-size: 1em;
+ margin-top: 10px;
+ transition: background-color 0.2s ease;
 }
 button:hover {
-  background: #a0522d; 
+ background: #a0522d; 
 }
 
 #btn-logout {
@@ -206,12 +206,12 @@ button:hover {
   gap: 1.5rem;
 }
 #productos div {
-  border: 1px solid #f0f0f0;
+ border: 1px solid #f0f0f0;
   padding: 0; /* Quitamos padding para que la imagen pegue */
-  border-radius: 8px;
-  background: #fafafa;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  display: flex;
+ border-radius: 8px;
+ background: #fafafa;
+ box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+ display: flex;
   flex-direction: column;
 }
 #productos div .info {
@@ -251,20 +251,20 @@ button:hover {
   padding-left: 0;
 }
 #carrito li {
-  list-style: none;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+ list-style: none;
+ padding: 10px 0;
+ border-bottom: 1px solid #eee;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
 }
 #carrito li:last-child {
   border-bottom: none;
 }
 #carrito button {
-  background: #d9534f; 
-  font-size: 0.8em;
-  padding: 4px 8px;
+ background: #d9534f; 
+ font-size: 0.8em;
+ padding: 4px 8px;
   margin: 0;
 }
 #carrito strong {
