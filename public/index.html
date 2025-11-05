@@ -7,68 +7,88 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1> Panadería La Desesperanza</h1>
 
-    <section id="auth-section">
-    <h2> Registro / Inicio de sesión</h2>
+    <header>
+    <nav class="container">
+      <a href="/" class="logo">🥐 Panadería La Desesperanza</a>
+      <ul class="nav-links">
+        <li><a href="#productos-section">Productos</a></li>
+        <li><a href="#carrito-section">Carrito</a></li>
+        <li><a href="#admin-section" id="nav-admin-link" style="display:none;">Admin</a></li>
+      </ul>
+      <div id="nav-auth">
+              </div>
+    </nav>
+  </header>
+
+    <div class="hero">
+    <div class="hero-content">
+      <h1>El pan de cada día, hecho con pasión.</h1>
+      <p>Descubre nuestros productos de temporada.</p>
+      <a href="#productos-section" class="btn-primary">Ver Productos</a>
+    </div>
+  </div>
+
+    <main class="container">
     
-    <div id="register">
-      <h3>Registrar nuevo usuario</h3>
-      <input id="reg-username" placeholder="Usuario para registrar" autocomplete="off">
-      <input id="reg-password" type="password" placeholder="Contraseña" autocomplete="off">
-      <button id="btn-register">Registrar</button>
-    </div>
-    <hr>
-    <div id="login">
-      <h3>Iniciar Sesión</h3>
-      <input id="login-username" placeholder="Usuario para login">
-      <input id="login-password" type="password" placeholder="Contraseña">
-      <button id="btn-login">Iniciar sesión</button>
-    </div>
-    <hr>
-    
-        <div id="welcome-section" style="display:none;">
-      <p id="welcome-msg"></p>
-      <button id="btn-logout">Cerrar sesión</button>
-    </div>
+        <section id="auth-section">
+      <h2>👤 Registro / Inicio de sesión</h2>
+      
+      <div id="register">
+        <h3>Registrar nuevo usuario</h3>
+        <input id="reg-username" placeholder="Usuario para registrar" autocomplete="off">
+        <input id="reg-password" type="password" placeholder="Contraseña" autocomplete="off">
+        <button id="btn-register">Registrar</button>
+      </div>
+      <hr>
+      <div id="login">
+        <h3>Iniciar Sesión</h3>
+        <input id="login-username" placeholder="Usuario para login">
+        <input id="login-password" type="password" placeholder="Contraseña">
+        <button id="btn-login">Iniciar sesión</button>
+      </div>
+      <hr id="auth-hr" style="display:none;">
+      
+            <div id="welcome-section" style="display:none;">
+        <p id="welcome-msg"></p>
+      </div>
 
-        <p id="auth-msg"></p>
-  </section>
+            <p id="auth-msg"></p>
+    </section>
 
-    <section id="productos-section" style="display:none;">
-    <h2>Productos</h2>
-    <div id="productos"></div>
-  </section>
+        <section id="productos-section" style="display:none;">
+      <h2>Productos</h2>
+      <div id="productos"></div>
+    </section>
 
-    <section id="carrito-section" style="display:none;">
-    <h2>🛒 Carrito</h2>
-    <ul id="carrito"></ul>
-    <button id="btnRealizarPedido" class="btn-success" style="width: 100%;">Realizar Pedido</button>
-    <p id="pedido-msg" style="text-align: center; color: green; font-weight: bold;"></p>
-  
+        <section id="carrito-section" style="display:none;">
+      <h2>🛒 Carrito</h2>
+      <ul id="carrito"></ul>
+      <button id="btnRealizarPedido" class="btn-success" style="width: 100%;">Realizar Pedido</button>
+      <p id="pedido-msg" style="text-align: center; color: green; font-weight: bold;"></p>
+    </section>
 
-  </section>
-
-    <section id="admin-section" style="display:none;">
-    <h2> Panel de Administrador </h2>
-    <button id="btnNuevoProducto" class="btn-success">+ Agregar Producto</button>
-    
-    <div style="overflow-x: auto; margin-top: 15px;">
-      <table class="tabla-admin">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tabla-productos-admin">
-                  </tbody>
-      </table>
-    </div>
-  </section>
+        <section id="admin-section" style="display:none;">
+      <h2>🛠️ Panel de Administrador (CRUD)</h2>
+      <button id="btnNuevoProducto" class="btn-success">+ Agregar Producto</button>
+      
+      <div style="overflow-x: auto; margin-top: 15px;">
+        <table class="tabla-admin">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-productos-admin">
+                      </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
     <div id="productoModal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
@@ -85,7 +105,7 @@
           <select id="id_categoria" required>
             <option value="1">Temporada</option>
             <option value="2">Pan Dulce</option>
-                      </select>
+          </select>
         </div>
         <div>
           <label for="descripcion">Descripción</label>
@@ -108,12 +128,6 @@
       </form>
     </div>
   </div>
-
-<section id="carrito-section" style="display:none;">
-    <h2> Carrito</h2>
-    <ul id="carrito"></ul>
-
-
 
   <script src="app.js"></script>
 </body>
