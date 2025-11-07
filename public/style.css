@@ -97,12 +97,15 @@ nav.container {
   margin-left: 1rem;
   font-weight: bold;
 }
+#nav-auth span {
+  margin-right: 1rem;
+}
 
 /* --- HERO IMAGE --- */
 .hero {
   height: 40vh; /* 40% de la altura de la ventana */
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-              url('https://images.unsplash.com/photo-1509440159596-0249088772FF');
+          url('https://crehana-blog.imgix.net/media/filer_public/04/0d/040d54db-ce2f-492c-8ff8-a7af4375925a/tipos-de-panaderia.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -155,20 +158,33 @@ section {
  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* --- Autenticación --- */
+/* --- 
+    REGLA CSS CORREGIDA 
+    Aplica a todos los tipos de input en la sección de auth
+--- */
 #auth-section input[type="text"],
-#auth-section input[type="password"] {
- width: calc(100% - 20px);
- padding: 10px;
- margin: 8px 0;
- border: 1px solid #ddd;
- border-radius: 5px;
- box-sizing: border-box; 
+#auth-section input[type="password"],
+#auth-section input[type="email"],
+#auth-section input[type="tel"] {
+  width: 100%;             /* Ocupa todo el ancho */
+  padding: 12px;
+  margin-bottom: 15px;     /* Espacio entre campos */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;  /* Asegura que el padding no rompa el ancho */
+  font-size: 1rem;
+}
+
+/* --- NUEVA REGLA: Botones en la sección de auth --- */
+#auth-section button {
+  width: 100%;
+  margin-top: 10px;
 }
 
 #auth-msg {
   font-weight: bold;
   color: #d9534f;
+  text-align: center;
 }
 #welcome-msg {
   font-weight: bold;
@@ -178,25 +194,18 @@ section {
 
 /* --- Botones Genéricos --- */
 button {
- background: #d2691e; 
- color: white;
- border: none;
- padding: 10px 15px;
- border-radius: 6px;
- cursor: pointer;
- font-size: 1em;
- margin-top: 10px;
- transition: background-color 0.2s ease;
+  background: #d2691e; 
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
 }
 button:hover {
- background: #a0522d; 
-}
-
-#btn-logout {
-  background-color: #aaa;
-}
-#btn-logout:hover {
-  background-color: #888;
+  background: #a0522d; 
 }
 
 /* --- Productos (Cliente) --- */
@@ -207,7 +216,7 @@ button:hover {
 }
 #productos div {
  border: 1px solid #f0f0f0;
-  padding: 0; /* Quitamos padding para que la imagen pegue */
+  padding: 0;
  border-radius: 8px;
  background: #fafafa;
  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -217,11 +226,12 @@ button:hover {
 #productos div .info {
   padding: 15px;
 }
+/* --- Así debe quedar tu regla en style.css --- */
 #productos img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px 8px 0 0;
+ width: 20%;
+ aspect-ratio: 1 / 1; /* <-- ¡Esta es la solución! (1 / 1 = cuadrado) */
+ object-fit: cover;
+ border-radius: 8px 8px 0 0;
 }
 #productos strong {
   font-size: 1.2em;
@@ -362,11 +372,12 @@ button:hover {
 .modal-content input[type="number"],
 .modal-content textarea,
 .modal-content select {
-  width: calc(100% - 22px); 
+  width: 100%; /* Cambiado para que sea consistente */
   padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box; /* Añadido */
 }
 .modal-content button {
   width: 100%;

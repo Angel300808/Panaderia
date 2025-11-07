@@ -1,134 +1,160 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panadería La Desesperanza</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panadería La Desesperanza</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-    <nav class="container">
-      <a href="/" class="logo">🥐 Panadería La Desesperanza</a>
-      <ul class="nav-links">
-        <li><a href="#productos-section">Productos</a></li>
-        <li><a href="#carrito-section">Carrito</a></li>
-        <li><a href="#admin-section" id="nav-admin-link" style="display:none;">Admin</a></li>
-      </ul>
-      <div id="nav-auth">
-              </div>
-    </nav>
-  </header>
+    <header>
+    <nav class="container">
+      <a href="/" class="logo"> Panadería La Desesperanza</a>
+      <ul class="nav-links">
+        <li><a href="#productos-section">Productos</a></li>
+        <li><a href="#carrito-section">Carrito</a></li>
+        <li><a href="#admin-section" id="nav-admin-link" style="display:none;">Admin</a></li>
+      </ul>
+      <div id="nav-auth">
+            </div>
+    </nav>
+  </header>
 
-    <div class="hero">
-    <div class="hero-content">
-      <h1>El pan de cada día, hecho con pasión.</h1>
-      <p>Descubre nuestros productos de temporada.</p>
-      <a href="#productos-section" class="btn-primary">Ver Productos</a>
-    </div>
-  </div>
+    <div class="hero">
+    <div class="hero-content">
+      <h1>El pan de cada día, hecho con pasión.</h1>
+      <p>Descubre nuestros productos de temporada.</p>
+      <a href="#productos-section" class="btn-primary">Ver Productos</a>
+    </div>
+  </div>
 
-    <main class="container">
-    
-        <section id="auth-section">
-      <h2>👤 Registro / Inicio de sesión</h2>
-      
-      <div id="register">
-        <h3>Registrar nuevo usuario</h3>
-        <input id="reg-username" placeholder="Usuario para registrar" autocomplete="off">
-        <input id="reg-password" type="password" placeholder="Contraseña" autocomplete="off">
-        <button id="btn-register">Registrar</button>
-      </div>
-      <hr>
-      <div id="login">
-        <h3>Iniciar Sesión</h3>
-        <input id="login-username" placeholder="Usuario para login">
-        <input id="login-password" type="password" placeholder="Contraseña">
-        <button id="btn-login">Iniciar sesión</button>
-      </div>
-      <hr id="auth-hr" style="display:none;">
-      
-            <div id="welcome-section" style="display:none;">
-        <p id="welcome-msg"></p>
-      </div>
+    <main class="container">
+    
+<section id="auth-section">
+  <h2>  Registro / Inicio de sesión</h2>
+  
+  <form id="register-form">
+    <div id="register">
+      <h3>Registrar nuevo usuario</h3>
+      
+      <input id="reg-nombre" placeholder="Nombre completo" autocomplete="name" 
+             type="text" 
+             pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" 
+             title="Solo puedes usar letras y espacios." 
+             required>
+             
+      <input id="reg-email" type="email" placeholder="Email" autocomplete="email" 
+             title="Ingresa un correo electrónico válido."
+             required>
+             
+      <input id="reg-telefono" type="tel" placeholder="Teléfono (opcional)" autocomplete="tel"
+             pattern="[0-9+]{8,15}"
+             title="Ingresa solo números (y opcionalmente '+') Mínimo 8 dígitos.">
+      
+      <input id="reg-username" placeholder="Usuario para registrar" autocomplete="off"
+             pattern="[a-zA-Z0-9_]{4,}"
+             title="Mínimo 4 caracteres. Solo letras, números y guion bajo."
+             required>
+             
+      <input id="reg-password" type="password" placeholder="Contraseña" autocomplete="off"
+             minlength="6"
+             title="Tu contraseña debe tener al menos 6 caracteres."
+             required>
+             
+      <button id="btn-register" type="submit">Registrar</button>
+    </div>
+  </form> <hr>
+  
+  <form id="login-form">
+    <div id="login">
+      <h3>Iniciar Sesión</h3>
+      <input id="login-username" placeholder="Usuario para login" required>
+      <input id="login-password" type="password" placeholder="Contraseña" required>
+      <button id="btn-login" type="submit">Iniciar sesión</button>
+    </div>
+  </form> <hr id="auth-hr" style="display:none;">
+  
+  <div id="welcome-section" style="display:none;">
+    <p id="welcome-msg"></p>
+  </div>
 
-            <p id="auth-msg"></p>
-    </section>
+  <p id="auth-msg"></p>
+</section>
 
-        <section id="productos-section" style="display:none;">
-      <h2>Productos</h2>
-      <div id="productos"></div>
-    </section>
+        <section id="productos-section" style="display:none;">
+      <h2>Productos</h2>
+      <div id="productos"></div>
+    </section>
 
-        <section id="carrito-section" style="display:none;">
-      <h2>🛒 Carrito</h2>
-      <ul id="carrito"></ul>
-      <button id="btnRealizarPedido" class="btn-success" style="width: 100%;">Realizar Pedido</button>
-      <p id="pedido-msg" style="text-align: center; color: green; font-weight: bold;"></p>
-    </section>
+        <section id="carrito-section" style="display:none;">
+      <h2>🛒 Carrito</h2>
+      <ul id="carrito"></ul>
+      <button id="btnRealizarPedido" class="btn-success" style="width: 100%;">Realizar Pedido</button>
+      <p id="pedido-msg" style="text-align: center; color: green; font-weight: bold;"></p>
+    </section>
 
-        <section id="admin-section" style="display:none;">
-      <h2>🛠️ Panel de Administrador (CRUD)</h2>
-      <button id="btnNuevoProducto" class="btn-success">+ Agregar Producto</button>
-      
-      <div style="overflow-x: auto; margin-top: 15px;">
-        <table class="tabla-admin">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-productos-admin">
-                      </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+        <section id="admin-section" style="display:none;">
+      <h2> Panel de Administrador </h2>
+      <button id="btnNuevoProducto" class="btn-success">+ Agregar Producto</button>
+      
+      <div style="overflow-x: auto; margin-top: 15px;">
+        <table class="tabla-admin">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-productos-admin">
+                  </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
-    <div id="productoModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-      <span class="modal-close-btn">&times;</span>
-      <h3 id="productoModalLabel">Agregar Producto</h3>
-      <form id="productoForm">
-        <input type="hidden" id="productoId">
-        <div>
-          <label for="nombre">Nombre *</label>
-          <input type="text" id="nombre" required>
-        </div>
-        <div>
-          <label for="id_categoria">Categoría *</label>
-          <select id="id_categoria" required>
-            <option value="1">Temporada</option>
-            <option value="2">Pan Dulce</option>
-          </select>
-        </div>
-        <div>
-          <label for="descripcion">Descripción</label>
-          <textarea id="descripcion" rows="3"></textarea>
-        </div>
-        <div>
-          <label for="precio">Precio *</label>
-          <input type="number" id="precio" step="0.01" min="0" required>
-        </div>
-        <div>
-          <label for="stock">Stock *</label>
-          <input type="number" id="stock" min="0" required>
-        </div>
-        <div>
-          <label for="imagen_url">URL de Imagen</label>
-          <input type="text" id="imagen_url" placeholder="https://ejemplo.com/imagen.jpg">
-        </div>
-        <p id="formError" style="color:red; display:none;"></p>
-        <button type="button" id="btnGuardar">Guardar</button>
-      </form>
-    </div>
-  </div>
+    <div id="productoModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <span class="modal-close-btn">&times;</span>
+      <h3 id="productoModalLabel">Agregar Producto</h3>
+      <form id="productoForm">
+        <input type="hidden" id="productoId">
+        <div>
+          <label for="nombre">Nombre *</label>
+          <input type="text" id="nombre" required>
+        </div>
+        <div>
+          <label for="id_categoria">Categoría *</label>
+          <select id="id_categoria" required>
+            <option value="1">Temporada</option>
+            <option value="2">Pan Dulce</option>
+          </select>
+        </div>
+        <div>
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" rows="3"></textarea>
+        </div>
+        <div>
+          <label for="precio">Precio *</label>
+          <input type="number" id="precio" step="0.01" min="0" required>
+        </div>
+        <div>
+          <label for="stock">Stock *</label>
+          <input type="number" id="stock" min="0" required>
+        </div>
+        <div>
+          <label for="imagen_url">URL de Imagen</label>
+          <input type="text" id="imagen_url" placeholder="https://ejemplo.com/imagen.jpg">
+        </div>
+        <p id="formError" style="color:red; display:none;"></p>
+        <button type="button" id="btnGuardar">Guardar</button>
+      </form>
+    </div>
+  </div>
 
-  <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
