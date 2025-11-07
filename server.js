@@ -84,14 +84,14 @@ app.post('/register', async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     const [userResult] = await connection.execute(
-      'INSERT INTO Usuarios (username, password_hash) VALUES (?, ?)',
+      'INSERT INTO usuarios (username, password_hash) VALUES (?, ?)',
       [username, hash]
     );
     
     const newUserId = userResult.insertId;
 
     await connection.execute(
-      'INSERT INTO Clientes (id_usuario, nombre, email, telefono) VALUES (?, ?, ?, ?)',
+      'INSERT INTO clientes (id_usuario, nombre, email, telefono) VALUES (?, ?, ?, ?)',
       [newUserId, nombre, email, telefono || null]
     );
 
@@ -130,8 +130,8 @@ app.post('/login', async (req, res) => {
         u.username, 
         u.password_hash, 
         c.nombre 
-      FROM Usuarios u
-      LEFT JOIN Clientes c ON u.id = c.id_usuario
+      FROM usuarios u
+      LEFT JOIN clientes c ON u.id = c.id_usuario
       WHERE u.username = ?
     `;
     const [rows] = await connection.execute(query, [username]);
@@ -214,7 +214,7 @@ app.post('/api/productos', requireAdmin, async (req, res) => {
   try {
     connection = await mysql.createConnection(dbConfig);
     const [result] = await connection.execute(
-      'INSERT INTO Productos (nombre, descripcion, precio, stock, id_categoria, imagen_url) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO productos (nombre, descripcion, precio, stock, id_categoria, imagen_url) VALUES (?, ?, ?, ?, ?, ?)',
       [nombre, descripcion, precio, stock, id_categoria, imagen_url]
     );
     res.status(201).json({ id: result.insertId, ...req.body });
@@ -236,7 +236,7 @@ app.put('/api/productos/:id', requireAdmin, async (req, res) => {
   try {
     connection = await mysql.createConnection(dbConfig);
     await connection.execute(
-      'UPDATE Productos SET nombre = ?, descripcion = ?, precio = ?, stock = ?, id_categoria = ?, imagen_url = ? WHERE id = ?',
+      'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ?, id_categoria = ?, imagen_url = ? WHERE id = ?',
       [nombre, descripcion, precio, stock, id_categoria, imagen_url, id]
     );
     res.json({ message: 'Producto actualizado correctamente.' });
@@ -253,7 +253,7 @@ app.delete('/api/productos/:id', requireAdmin, async (req, res) => {
   let connection;
   try {
     connection = await mysql.createConnection(dbConfig);
-    await connection.execute('DELETE FROM Productos WHERE id = ?', [id]);
+    await connection.execute('DELETE FROM productos WHERE id = ?', [id]);
     res.json({ message: 'Producto eliminado correctamente.' });
   } catch (err) {
     console.error(err);
@@ -284,7 +284,7 @@ app.post('/api/pedidos', requireCliente, async (req, res) => {
     const placeholders = ids.map(() => '?').join(',');
     
     const [rows] = await connection.execute(
-      `SELECT id, nombre, precio, stock FROM Productos WHERE id IN (${placeholders})`,
+      `SELECT id, nombre, precio, stock FROM productos WHERE id IN (${placeholders})`,
       ids
     );
 
@@ -315,19 +315,19 @@ app.post('/api/pedidos', requireCliente, async (req, res) => {
     }
 
     const [pedidoResult] = await connection.execute(
-      'INSERT INTO Pedidos (id_cliente, total, estado) VALUES (?, ?, ?)',
+      'INSERT INTO pedidos (id_cliente, total, estado) VALUES (?, ?, ?)',
       [id_cliente, total, 'completado'] 
     );
     const id_pedido = pedidoResult.insertId;
 
     for (const detalle of detallesPedido) {
       await connection.execute(
-        'INSERT INTO Detalle_Pedidos (id_pedido, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)',
+        'INSERT INTO detalle_pedidos (id_pedido, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)',
         [id_pedido, detalle.id_producto, detalle.cantidad, detalle.precio_unitario]
       );
       
       await connection.execute(
-        'UPDATE Productos SET stock = stock - ? WHERE id = ?',
+        'UPDATE productos SET stock = stock - ? WHERE id = ?',
         [detalle.cantidad, detalle.id_producto]
       );
     }
@@ -377,7 +377,7 @@ app.get('/api/carrito', requireCliente, async (req, res) => {
 
     connection = await mysql.createConnection(dbConfig);
     const [rows] = await connection.execute(
-      `SELECT id, nombre, precio FROM Productos WHERE id IN (${placeholders})`,
+      `SELECT id, nombre, precio FROM productos WHERE id IN (${placeholders})`,
       ids
     );
 
@@ -421,20 +421,20 @@ app.use((req, res) => {
   let connection;
   try {
     connection = await mysql.createConnection(dbConfig);
-    const [rows] = await connection.execute('SELECT * FROM Usuarios WHERE username = ?', ['admin']);
+    const [rows] = await connection.execute('SELECT * FROM usuarios WHERE username = ?', ['admin']);
     
     if (rows.length === 0) {
       await connection.beginTransaction();
       
       const hash = await bcrypt.hash('1234', 10); // Contraseña por defecto es 1234
       const [userResult] = await connection.execute(
-        'INSERT INTO Usuarios (username, password_hash) VALUES (?, ?)', 
+        'INSERT INTO usuarios (username, password_hash) VALUES (?, ?)', 
         ['admin', hash]
       );
       const adminId = userResult.insertId;
       
       await connection.execute(
-        'INSERT INTO Clientes (id_usuario, nombre, email, telefono) VALUES (?, ?, ?, ?)',
+        'INSERT INTO clientes (id_usuario, nombre, email, telefono) VALUES (?, ?, ?, ?)',
         [adminId, 'Administrador', 'admin@panaderia.com', 'N/A']
       );
       
