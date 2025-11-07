@@ -32,7 +32,6 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Config DB ---
 const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -40,9 +39,6 @@ const dbConfig = {
   database: process.env.DB_DATABASE
 };
 
-// =============================================
-// MIDDLEWARES DE AUTENTICACIÓN Y ROLES
-// =============================================
 
 const requireAuth = (req, res, next) => {
   if (!req.session.userId) {
@@ -51,7 +47,6 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-// --- ¡NUEVO! Middleware solo para Admin ---
 const requireAdmin = (req, res, next) => {
   if (!req.session.userId) {
     return res.status(401).json({ error: 'Acceso no autorizado.' });
@@ -62,7 +57,6 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
-// --- ¡NUEVO! Middleware solo para Cliente ---
 const requireCliente = (req, res, next) => {
   if (!req.session.userId) {
     return res.status(401).json({ error: 'Acceso no autorizado.' });
@@ -73,9 +67,6 @@ const requireCliente = (req, res, next) => {
   next();
 };
 
-// =============================================
-// RUTAS DE AUTENTICACIÓN
-// =============================================
 
 app.post('/register', async (req, res) => {
   const { username, password, nombre, email, telefono } = req.body;
@@ -193,11 +184,7 @@ app.post('/logout', (req, res) => {
   });
 });
 
-// =============================================
-// API DE PRODUCTOS (Acceso Público para GET, Restringido para Admin en CUD)
-// =============================================
 
-// GET /api/productos sigue siendo público, cualquiera puede verlos
 app.get('/api/productos', async (req, res) => {
   let connection;
   try {
@@ -217,7 +204,6 @@ app.get('/api/productos', async (req, res) => {
   }
 });
 
-// --- ¡PROTEGIDO! Solo Admin ---
 app.post('/api/productos', requireAdmin, async (req, res) => {
   const { nombre, descripcion, precio, stock, id_categoria, imagen_url } = req.body;
   if (!nombre || !precio || precio <= 0 || stock == null || stock < 0 || !id_categoria)
@@ -239,7 +225,6 @@ app.post('/api/productos', requireAdmin, async (req, res) => {
   }
 });
 
-// --- ¡PROTEGIDO! Solo Admin ---
 app.put('/api/productos/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { nombre, descripcion, precio, stock, id_categoria, imagen_url } = req.body;
@@ -262,7 +247,6 @@ app.put('/api/productos/:id', requireAdmin, async (req, res) => {
   }
 });
 
-// --- ¡PROTEGIDO! Solo Admin ---
 app.delete('/api/productos/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
   let connection;
@@ -280,11 +264,7 @@ app.delete('/api/productos/:id', requireAdmin, async (req, res) => {
   }
 });
 
-// =============================================
-// API DE PEDIDOS Y CARRITO (Solo Clientes)
-// =============================================
 
-// --- ¡PROTEGIDO! Solo Cliente ---
 app.post('/api/pedidos', requireCliente, async (req, res) => {
   
   const carritoSession = req.session.carrito || [];
@@ -365,7 +345,6 @@ app.post('/api/pedidos', requireCliente, async (req, res) => {
 });
 
 
-// --- ¡PROTEGIDO! Solo Cliente ---
 app.post('/api/carrito', requireCliente, (req, res) => {
   const { id_producto, cantidad } = req.body;
   if (!id_producto || !cantidad || cantidad <= 0)
@@ -384,7 +363,6 @@ app.post('/api/carrito', requireCliente, (req, res) => {
   res.json({ carrito: req.session.carrito });
 });
 
-// --- ¡PROTEGIDO! Solo Cliente ---
 app.get('/api/carrito', requireCliente, async (req, res) => {
   const carritoSession = req.session.carrito || [];
   if (carritoSession.length === 0) {
@@ -426,7 +404,6 @@ app.get('/api/carrito', requireCliente, async (req, res) => {
   }
 });
 
-// --- ¡PROTEGIDO! Solo Cliente ---
 app.delete('/api/carrito/:id_producto', requireCliente, (req, res) => {
   const id_producto = parseInt(req.params.id_producto, 10);
   if (!req.session.carrito) return res.json({ carrito: [] });
@@ -434,17 +411,10 @@ app.delete('/api/carrito/:id_producto', requireCliente, (req, res) => {
   res.json({ carrito: req.session.carrito });
 });
 
-// =============================================
-// RUTA FINAL (Sirve el index.html)
-// =============================================
-
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// =============================================
-// INICIO DEL SERVIDOR Y CREACIÓN DEL ADMIN
-// =============================================
 
 (async () => {
   let connection;

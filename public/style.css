@@ -1,16 +1,14 @@
-/* public/style.css */
 
-/* --- RESET BÁSICO Y FUENTES --- */
 body {
  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
  margin: 0;
- background: #fdfaf6; /* Fondo crema muy claro */
+ background: #fdfaf6; 
  color: #333;
  line-height: 1.6;
 }
 
 h1, h2, h3 {
- color: #8c5a2d; /* Marrón oscuro para títulos */
+ color: #8c5a2d; 
 }
 
 h1 {
@@ -19,32 +17,31 @@ h1 {
 }
 
 h2 {
- border-bottom: 2px solid #e0c9b0; /* Línea divisoria sutil */
+ border-bottom: 2px solid #e0c9b0; 
  padding-bottom: 5px;
 }
 
 a {
-  color: #d2691e; /* Naranja/marrón para enlaces */
+  color: #d2691e; 
   text-decoration: none;
 }
 a:hover {
   text-decoration: underline;
 }
 
-/* --- CLASE CONTENEDORA --- */
+
 .container {
   width: 90%;
   max-width: 1100px;
   margin: 0 auto;
 }
 
-/* --- BARRA DE NAVEGACIÓN --- */
 header {
   background: #333;
   color: white;
   padding: 1rem 0;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: sticky; /* Se queda fija arriba */
+  position: sticky; 
   top: 0;
   z-index: 100;
 }
@@ -101,9 +98,8 @@ nav.container {
   margin-right: 1rem;
 }
 
-/* --- HERO IMAGE --- */
 .hero {
-  height: 40vh; /* 40% de la altura de la ventana */
+  height: 40vh; 
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
           url('https://crehana-blog.imgix.net/media/filer_public/04/0d/040d54db-ce2f-492c-8ff8-a7af4375925a/tipos-de-panaderia.jpg');
   background-size: cover;
@@ -144,38 +140,32 @@ nav.container {
 }
 
 
-/* --- CONTENIDO PRINCIPAL (las secciones) --- */
 main.container {
   padding-top: 2rem;
 }
 
 section {
- max-width: 100%; /* Ajustado para que quepa en el container */
- margin: 20px 0; /* Separación vertical */
+ max-width: 100%; 
+ margin: 20px 0; 
  padding: 20px;
  background: #ffffff;
  border-radius: 8px;
  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* --- 
-    REGLA CSS CORREGIDA 
-    Aplica a todos los tipos de input en la sección de auth
---- */
 #auth-section input[type="text"],
 #auth-section input[type="password"],
 #auth-section input[type="email"],
 #auth-section input[type="tel"] {
-  width: 100%;             /* Ocupa todo el ancho */
+  width: 100%;             
   padding: 12px;
-  margin-bottom: 15px;     /* Espacio entre campos */
+  margin-bottom: 15px;    
   border: 1px solid #ccc;
   border-radius: 5px;
-  box-sizing: border-box;  /* Asegura que el padding no rompa el ancho */
+  box-sizing: border-box;  
   font-size: 1rem;
 }
 
-/* --- NUEVA REGLA: Botones en la sección de auth --- */
 #auth-section button {
   width: 100%;
   margin-top: 10px;
@@ -192,7 +182,6 @@ section {
   color: #333;
 }
 
-/* --- Botones Genéricos --- */
 button {
   background: #d2691e; 
   color: white;
@@ -208,7 +197,6 @@ button:hover {
   background: #a0522d; 
 }
 
-/* --- Productos (Cliente) --- */
 #productos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -226,10 +214,9 @@ button:hover {
 #productos div .info {
   padding: 15px;
 }
-/* --- Así debe quedar tu regla en style.css --- */
 #productos img {
  width: 20%;
- aspect-ratio: 1 / 1; /* <-- ¡Esta es la solución! (1 / 1 = cuadrado) */
+ aspect-ratio: 1 / 1; 
  object-fit: cover;
  border-radius: 8px 8px 0 0;
 }
@@ -246,7 +233,7 @@ button:hover {
   color: #666;
   display: block;
   margin-top: 5px;
-  flex-grow: 1; /* Empuja el botón hacia abajo */
+  flex-grow: 1; 
 }
 #productos button {
   padding: 6px 12px;
@@ -256,7 +243,6 @@ button:hover {
   box-sizing: border-box;
 }
 
-/* --- Carrito (Cliente) --- */
 #carrito {
   padding-left: 0;
 }
@@ -282,7 +268,6 @@ button:hover {
 }
 
 
-/* --- ESTILOS DEL PANEL DE ADMIN (CRUD) --- */
 
 .btn-success {
   background-color: #28a745;
@@ -326,7 +311,6 @@ button:hover {
 }
 
 
-/* --- ESTILOS DEL MODAL (CRUD) --- */
 .modal-overlay {
   position: fixed;
   z-index: 1000;
@@ -372,12 +356,12 @@ button:hover {
 .modal-content input[type="number"],
 .modal-content textarea,
 .modal-content select {
-  width: 100%; /* Cambiado para que sea consistente */
+  width: 100%; 
   padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box; /* Añadido */
+  box-sizing: border-box; 
 }
 .modal-content button {
   width: 100%;
