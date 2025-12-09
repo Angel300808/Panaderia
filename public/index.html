@@ -1,160 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panadería La Desesperanza</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panadería Navideña La Desesperanza</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-
     <header>
-    <nav class="container">
-      <a href="/" class="logo"> Panadería La Desesperanza</a>
-      <ul class="nav-links">
-        <li><a href="#productos-section">Productos</a></li>
-        <li><a href="#carrito-section">Carrito</a></li>
-        <li><a href="#admin-section" id="nav-admin-link" style="display:none;">Admin</a></li>
-      </ul>
-      <div id="nav-auth">
+        <div class="brand">
+            <h1>🎄 Panadería La Desesperanza 🎄</h1>
+        </div>
+
+        <div class="user-actions">
+            <div id="user-panel">
+                <input type="text" id="username" placeholder="👤 Usuario">
+                <input type="password" id="password" placeholder="🔑 Contraseña">
+                <button onclick="login()" class="btn-login">Entrar</button>
+                <button onclick="abrirRegistro()" class="btn-register">Crear Cuenta</button>
             </div>
-    </nav>
-  </header>
 
-    <div class="hero">
-    <div class="hero-content">
-      <h1>El pan de cada día, hecho con pasión.</h1>
-      <p>Descubre nuestros productos de temporada.</p>
-      <a href="#productos-section" class="btn-primary">Ver Productos</a>
+            <div id="user-info" style="display:none;">
+                <span>Hola, <b id="display-name"></b> | Saldo: $<span id="display-saldo">0</span></span>
+                <div class="funds-control">
+                    <input type="number" id="monto-fondos" placeholder="$">
+                    <button onclick="agregarFondos()" class="btn-add">+</button>
+                </div>
+                <button onclick="logout()" class="btn-logout">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="map-section">
+            <h3>Nuestras Sucursales</h3>
+            <div id="mapid"></div>
+        </section>
+
+        <div class="container">
+            <section id="productos">
+                <div id="admin-panel" style="display:none;" class="card-registro">
+                    <h3 style="color: var(--rojo-oscuro); margin-top:0;">👨‍🍳 Gestión del Horno (Admin)</h3>
+
+                    <input type="hidden" id="prod-id">
+                    <div
+                        style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px;">
+                        <input type="text" id="prod-nombre" placeholder="Nombre del Pan">
+                        <input type="text" id="prod-desc" placeholder="Descripción breve">
+                        <input type="number" id="prod-precio" placeholder="Precio ($)" style="width: 100px;">
+                        <input type="text" id="prod-img" placeholder="URL de la Imagen">
+                    </div>
+
+                    <div>
+                        <button onclick="guardarProducto()" class="btn-login">💾 Guardar Pan</button>
+                        <button onclick="limpiarFormularioAdmin()" class="btn-logout">🧹 Limpiar</button>
+                    </div>
+                    <hr style="border-color: var(--cafe-tierra); margin-top: 20px;">
+                </div>
+
+                <h2>Pan de Temporada</h2>
+                <div id="lista-productos" class="grid"></div>
+            </section>
+
+            <aside id="carrito">
+                <h2>Tu Canasta</h2>
+                <ul id="lista-carrito"></ul>
+                <p>Total: $<span id="total-carrito">0</span></p>
+                <button onclick="procesarCompra()" class="btn-pagar">Pagar y Generar Ticket</button>
+            </aside>
+        </div>
+    </main>
+
+    <div id="modal-registro" class="modal">
+        <div class="modal-content card-registro">
+            <span class="close-btn" onclick="cerrarRegistro()">&times;</span>
+            <h3>🎅 Únete a la Familia 🎅</h3>
+            <p>Regístrate para pedir tu pan calientito</p>
+
+            <input type="text" id="reg-user" placeholder="Usuario deseado">
+            <input type="password" id="reg-pass" placeholder="Contraseña">
+            <input type="email" id="reg-email" placeholder="Correo Electrónico">
+            <input type="text" id="reg-nombre" placeholder="Tu Nombre Real">
+
+            <button onclick="registrarUsuario()" class="btn-pagar">¡Registrarme!</button>
+        </div>
     </div>
-  </div>
 
-    <main class="container">
-    
-<section id="auth-section">
-  <h2>  Registro / Inicio de sesión</h2>
-  
-  <form id="register-form">
-    <div id="register">
-      <h3>Registrar nuevo usuario</h3>
-      
-      <input id="reg-nombre" placeholder="Nombre completo" autocomplete="name" 
-             type="text" 
-             pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" 
-             title="Solo puedes usar letras y espacios." 
-             required>
-             
-      <input id="reg-email" type="email" placeholder="Email" autocomplete="email" 
-             title="Ingresa un correo electrónico válido."
-             required>
-             
-      <input id="reg-telefono" type="tel" placeholder="Teléfono (opcional)" autocomplete="tel"
-             pattern="[0-9+]{8,15}"
-             title="Ingresa solo números (y opcionalmente '+') Mínimo 8 dígitos.">
-      
-      <input id="reg-username" placeholder="Usuario para registrar" autocomplete="off"
-             pattern="[a-zA-Z0-9_]{4,}"
-             title="Mínimo 4 caracteres. Solo letras, números y guion bajo."
-             required>
-             
-      <input id="reg-password" type="password" placeholder="Contraseña" autocomplete="off"
-             minlength="6"
-             title="Tu contraseña debe tener al menos 6 caracteres."
-             required>
-             
-      <button id="btn-register" type="submit">Registrar</button>
+    <div id="modal-ticket" class="modal">
+        <div class="modal-content">
+            <h3>🎅 TICKET DE COMPRA 🎅</h3>
+            <p>Negocio: Panadería La Desesperanza</p>
+            <p>Fecha: <span id="ticket-fecha"></span></p>
+            <p>Venta #: <span id="ticket-id"></span></p>
+            <hr>
+            <ul id="ticket-productos"></ul>
+            <hr>
+            <h4>TOTAL: $<span id="ticket-total"></span></h4>
+            <button onclick="cerrarTicket()">Cerrar</button>
+        </div>
     </div>
-  </form> <hr>
-  
-  <form id="login-form">
-    <div id="login">
-      <h3>Iniciar Sesión</h3>
-      <input id="login-username" placeholder="Usuario para login" required>
-      <input id="login-password" type="password" placeholder="Contraseña" required>
-      <button id="btn-login" type="submit">Iniciar sesión</button>
-    </div>
-  </form> <hr id="auth-hr" style="display:none;">
-  
-  <div id="welcome-section" style="display:none;">
-    <p id="welcome-msg"></p>
-  </div>
 
-  <p id="auth-msg"></p>
-</section>
-
-        <section id="productos-section" style="display:none;">
-      <h2>Productos</h2>
-      <div id="productos"></div>
-    </section>
-
-        <section id="carrito-section" style="display:none;">
-      <h2>🛒 Carrito</h2>
-      <ul id="carrito"></ul>
-      <button id="btnRealizarPedido" class="btn-success" style="width: 100%;">Realizar Pedido</button>
-      <p id="pedido-msg" style="text-align: center; color: green; font-weight: bold;"></p>
-    </section>
-
-        <section id="admin-section" style="display:none;">
-      <h2> Panel de Administrador </h2>
-      <button id="btnNuevoProducto" class="btn-success">+ Agregar Producto</button>
-      
-      <div style="overflow-x: auto; margin-top: 15px;">
-        <table class="tabla-admin">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-productos-admin">
-                  </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-
-    <div id="productoModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-      <span class="modal-close-btn">&times;</span>
-      <h3 id="productoModalLabel">Agregar Producto</h3>
-      <form id="productoForm">
-        <input type="hidden" id="productoId">
-        <div>
-          <label for="nombre">Nombre *</label>
-          <input type="text" id="nombre" required>
-        </div>
-        <div>
-          <label for="id_categoria">Categoría *</label>
-          <select id="id_categoria" required>
-            <option value="1">Temporada</option>
-            <option value="2">Pan Dulce</option>
-          </select>
-        </div>
-        <div>
-          <label for="descripcion">Descripción</label>
-          <textarea id="descripcion" rows="3"></textarea>
-        </div>
-        <div>
-          <label for="precio">Precio *</label>
-          <input type="number" id="precio" step="0.01" min="0" required>
-        </div>
-        <div>
-          <label for="stock">Stock *</label>
-          <input type="number" id="stock" min="0" required>
-        </div>
-        <div>
-          <label for="imagen_url">URL de Imagen</label>
-          <input type="text" id="imagen_url" placeholder="https://ejemplo.com/imagen.jpg">
-        </div>
-        <p id="formError" style="color:red; display:none;"></p>
-        <button type="button" id="btnGuardar">Guardar</button>
-      </form>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="main.js"></script>
+    <script src="map.js"></script>
 </body>
+
 </html>

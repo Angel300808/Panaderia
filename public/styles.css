@@ -1,0 +1,392 @@
+/* --- CONFIGURACIÓN GENERAL Y PALETA DE COLORES --- */
+:root {
+    /* Paleta Navideña */
+    --rojo-vivo: #A60B08;
+    --rojo-oscuro: #5E0001;
+    --verde-bosque: #1D2E19;
+    --beige-grisaceo: #CFCABF;
+    --cafe-tierra: #76584C;
+
+    /* Variables funcionales */
+    --texto-principal: #1a1a1a;
+    --blanco: #ffffff;
+    --sombra-suave: 0 4px 8px rgba(29, 46, 25, 0.15);
+    --sombra-fuerte: 0 10px 25px rgba(94, 0, 1, 0.3);
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--beige-grisaceo);
+    color: var(--texto-principal);
+    margin: 0;
+    padding: 0;
+    /* Patrón sutil */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* --- ENCABEZADO (HEADER) --- */
+header {
+    background: linear-gradient(to right, #5E0001, #A60B08);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    /* Logo izq, Login der */
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-bottom: 4px solid var(--cafe-tierra);
+
+    /* Fijación y Capas */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    /* Mayor que el mapa (400), menor que modales (2000) */
+}
+
+.brand h1 {
+    font-family: 'Mountains of Christmas', cursive;
+    font-size: 2.2rem;
+    margin: 0;
+    color: #fff;
+    text-shadow: 2px 2px 0 var(--verde-bosque);
+}
+
+/* --- INPUTS Y BOTONES DEL HEADER --- */
+.user-actions input {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    margin-right: 5px;
+    font-size: 0.9rem;
+    width: 120px;
+    transition: width 0.3s;
+}
+
+.user-actions input:focus {
+    width: 150px;
+    background: #fff;
+    outline: 2px solid var(--beige-grisaceo);
+}
+
+.btn-login {
+    background-color: var(--verde-bosque);
+    color: var(--beige-grisaceo);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-register {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid var(--beige-grisaceo);
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+.btn-register:hover {
+    background-color: var(--beige-grisaceo);
+    color: var(--rojo-oscuro);
+}
+
+/* Panel de Usuario Logueado */
+#user-info {
+    display: flex;
+    align-items: center;
+    color: var(--blanco);
+    font-weight: bold;
+}
+
+.funds-control {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    border-radius: 20px;
+    margin: 0 10px;
+}
+
+.funds-control input {
+    width: 60px !important;
+    /* Forzar tamaño pequeño */
+    margin: 0;
+}
+
+.btn-add {
+    background: var(--verde-bosque);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.btn-logout {
+    background-color: var(--rojo-vivo);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* --- ESTRUCTURA PRINCIPAL --- */
+main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h2,
+h3 {
+    color: var(--rojo-oscuro);
+    border-bottom: 3px solid var(--verde-bosque);
+    display: inline-block;
+    padding-bottom: 5px;
+    font-family: 'Mountains of Christmas', cursive;
+    font-size: 1.8rem;
+}
+
+/* --- MAPA --- */
+#map-section {
+    background: var(--blanco);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: var(--sombra-suave);
+    margin-bottom: 40px;
+    border: 2px solid var(--cafe-tierra);
+}
+
+#mapid {
+    height: 350px;
+    width: 100%;
+    border-radius: 6px;
+    z-index: 1;
+    /* Bajo */
+}
+
+/* --- GRID DE PRODUCTOS Y CARRITO --- */
+.container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+#productos {
+    flex: 3;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+/* --- TARJETAS DE PRODUCTO --- */
+.card {
+    background: var(--blanco);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sombra-fuerte);
+    border-color: var(--rojo-vivo);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 4px solid var(--verde-bosque);
+}
+
+.card h4 {
+    margin: 15px 15px 5px;
+    font-size: 1.3rem;
+    color: var(--rojo-oscuro);
+    font-family: 'Mountains of Christmas', cursive;
+}
+
+.card p {
+    padding: 0 15px;
+    color: #555;
+    font-size: 0.9rem;
+    flex-grow: 1;
+}
+
+.card .price {
+    font-size: 1.4rem;
+    color: var(--cafe-tierra);
+    font-weight: 800;
+    margin: 10px 15px;
+}
+
+.card button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--rojo-vivo);
+    color: var(--blanco);
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.card button:hover {
+    background-color: var(--rojo-oscuro);
+}
+
+/* --- CARRITO (SIDEBAR) --- */
+#carrito {
+    flex: 1;
+    background: var(--blanco);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: var(--sombra-suave);
+    height: fit-content;
+    border-top: 8px solid var(--rojo-oscuro);
+    position: sticky;
+    top: 100px;
+    /* Se queda fijo al scrollear */
+}
+
+#lista-carrito li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--cafe-tierra);
+    padding: 10px 0;
+    color: var(--texto-principal);
+}
+
+#lista-carrito button {
+    background: none;
+    border: none;
+    color: var(--rojo-vivo);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.btn-pagar {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--verde-bosque);
+    color: var(--blanco);
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 0 #142011;
+    transition: transform 0.1s;
+}
+
+.btn-pagar:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+/* --- MODALES (TICKET Y REGISTRO) --- */
+.modal {
+    display: none;
+    /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(29, 46, 25, 0.8);
+    /* Fondo oscuro */
+    z-index: 2000;
+    /* Siempre encima del Header (1000) */
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    background: var(--blanco);
+    margin: 5% auto;
+    padding: 40px;
+    width: 350px;
+    position: relative;
+    box-shadow: var(--sombra-fuerte);
+}
+
+/* Estilo específico para el modal de Registro */
+.card-registro {
+    background: #fffbf0;
+    border: 4px solid var(--verde-bosque);
+    border-radius: 15px;
+    text-align: center;
+}
+
+.card-registro input {
+    display: block;
+    width: 85%;
+    margin: 10px auto;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Estilo específico para el modal de Ticket */
+#modal-ticket .modal-content {
+    font-family: 'Courier New', Courier, monospace;
+    border-top: 10px solid var(--rojo-vivo);
+    border-bottom: 10px solid var(--rojo-vivo);
+    /* Efecto papel cortado */
+    background-image:
+        linear-gradient(135deg, transparent 10px, var(--blanco) 10px),
+        linear-gradient(225deg, transparent 10px, var(--blanco) 10px);
+    background-position: top;
+    background-size: 20px 20px;
+    background-repeat: repeat-x;
+}
+
+#modal-ticket h3 {
+    text-align: center;
+    border-bottom: 2px dashed var(--texto-principal);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--rojo-vivo);
+}
+
+.modal-content button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background-color: var(--cafe-tierra);
+    color: var(--blanco);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-content button:hover {
+    background-color: #5d443b;
+}
