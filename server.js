@@ -20,5 +20,5 @@ app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);
 
 app.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:3000');
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
