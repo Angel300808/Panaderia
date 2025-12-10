@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const app = express();
-
+const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -19,6 +19,6 @@ const apiRoutes = require('./routes/api');
 app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
