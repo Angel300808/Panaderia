@@ -2,23 +2,50 @@
 let carrito = [];
 let usuarioLogueado = false;
 let rolUsuario = 'cliente';
+let mapa; // Variable para guardar el mapa
 
 /* --- 1. INICIALIZACIÓN --- */
 document.addEventListener('DOMContentLoaded', () => {
     cargarProductos();
+    inicializarMapa(); // Carga el mapa al iniciar
 });
 
-/* --- 2. CONTROL DE MODALES --- */
+/* --- 2. FUNCIONES DEL MAPA (Leaflet) --- */
+function inicializarMapa() {
+    // Verificamos que el div del mapa exista para evitar errores
+    if (!document.getElementById('mapid')) return;
+
+    // Coordenadas del centro (Zócalo CDMX por defecto)
+    mapa = L.map('mapid').setView([19.4326, -99.1332], 13);
+
+    // Cargar capa de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(mapa);
+
+    // Obtener sucursales desde la base de datos y poner pines
+    fetch('/api/sucursales')
+        .then(res => res.json())
+        .then(sucursales => {
+            sucursales.forEach(suc => {
+                L.marker([suc.lat, suc.lng]).addTo(mapa)
+                    .bindPopup(`<b>${suc.nombre}</b><br>¡Pan calientito aquí!`);
+            });
+        })
+        .catch(err => console.log("Error cargando mapa: " + err));
+}
+
+/* --- 3. CONTROL DE MODALES --- */
 function abrirRegistro() { document.getElementById('modal-registro').style.display = 'block'; }
 function cerrarRegistro() { document.getElementById('modal-registro').style.display = 'none'; }
 
-// Cerrar modales al hacer clic fuera
+// Cerrar modales al hacer clic fuera de ellos
 window.onclick = function (event) {
     if (event.target == document.getElementById('modal-registro')) cerrarRegistro();
     if (event.target == document.getElementById('modal-ticket')) cerrarTicket();
 }
 
-/* --- 3. CARGA DE PRODUCTOS (LÓGICA DE BOTONES) --- */
+/* --- 4. CARGA DE PRODUCTOS (LÓGICA DE BOTONES) --- */
 function cargarProductos() {
     fetch('/api/productos')
         .then(res => res.json())
@@ -29,7 +56,7 @@ function cargarProductos() {
             productos.forEach(prod => {
                 let botonesAccion = '';
 
-                // AQUÍ ESTÁ LA CLAVE: Decidimos qué botones mostrar según el rol
+                // Decidimos qué botones mostrar según el rol
                 if (rolUsuario === 'admin') {
                     // Botones para el JEFE
                     botonesAccion = `
@@ -61,7 +88,7 @@ function cargarProductos() {
         .catch(err => console.error("Error cargando productos:", err));
 }
 
-/* --- 4. SISTEMA DE USUARIOS --- */
+/* --- 5. SISTEMA DE USUARIOS --- */
 function login() {
     const u = document.getElementById('username').value;
     const p = document.getElementById('password').value;
@@ -85,9 +112,9 @@ function login() {
             if (rolUsuario === 'admin') {
                 alert(`Bienvenido Jefe ${data.nombre}`);
                 document.getElementById('carrito').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block'; // Mostrar Panel
+                document.getElementById('admin-panel').style.display = 'block';
 
-                // RECARGA IMPORTANTE: Esto actualiza los botones de los panes
+                // Importante: Recargar productos para que aparezcan botones de editar/borrar
                 cargarProductos();
             } else {
                 document.getElementById('carrito').style.display = 'block';
@@ -115,7 +142,7 @@ function registrarUsuario() {
     }).then(res => res.text()).then(msg => { alert(msg); cerrarRegistro(); });
 }
 
-/* --- 5. FUNCIONES DE ADMIN (Las que te faltaban) --- */
+/* --- 6. FUNCIONES DE ADMIN --- */
 
 function guardarProducto() {
     const id = document.getElementById('prod-id').value;
@@ -146,7 +173,7 @@ function guardarProducto() {
         .then(data => {
             alert(data.mensaje);
             limpiarFormularioAdmin();
-            cargarProductos(); // Refrescar la lista para ver el cambio
+            cargarProductos();
         })
         .catch(err => alert("Error al guardar: " + err));
 }
@@ -158,20 +185,17 @@ function eliminarProducto(id) {
         .then(res => res.json())
         .then(data => {
             alert(data.mensaje);
-            cargarProductos(); // Refrescar lista
+            cargarProductos();
         })
         .catch(err => alert("Error al eliminar"));
 }
 
 function llenarFormularioEdicion(id, nombre, desc, precio, img) {
-    // Llena los campos de arriba con los datos del pan seleccionado
     document.getElementById('prod-id').value = id;
     document.getElementById('prod-nombre').value = nombre;
     document.getElementById('prod-desc').value = desc;
     document.getElementById('prod-precio').value = precio;
     document.getElementById('prod-img').value = img;
-
-    // Scroll suave hacia arriba para ver el formulario
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -183,7 +207,7 @@ function limpiarFormularioAdmin() {
     document.getElementById('prod-img').value = '';
 }
 
-/* --- 6. CARRITO Y PAGOS (Clientes) --- */
+/* --- 7. CARRITO Y PAGOS (Clientes) --- */
 function agregarFondos() {
     const input = document.getElementById('monto-fondos');
     const monto = parseFloat(input.value);
@@ -191,6 +215,7 @@ function agregarFondos() {
         fetch('/api/fondos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ monto }) })
             .then(() => {
                 alert("Fondos agregados");
+                // Actualizar visualmente sin recargar
                 const saldoDisplay = document.getElementById('display-saldo');
                 saldoDisplay.innerText = (parseFloat(saldoDisplay.innerText) + monto).toFixed(2);
                 input.value = '';
@@ -221,10 +246,15 @@ function procesarCompra() {
     const total = parseFloat(document.getElementById('total-carrito').innerText);
     if (carrito.length === 0) return alert("Carrito vacío");
 
+    // VALIDACIÓN: Límite de 100 piezas (Requisito mencionado anteriormente)
+    const totalPiezas = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+    if (totalPiezas > 100) return alert("⚠️ ¡Alto ahí! Máximo 100 piezas por pedido.");
+
     fetch('/api/comprar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ carrito, total }) })
         .then(res => { if (!res.ok) throw new Error("Saldo insuficiente o error"); return res.json(); })
         .then(data => {
             mostrarTicket(data.num_venta, total);
+
             // Restar saldo visualmente
             const saldoDisplay = document.getElementById('display-saldo');
             saldoDisplay.innerText = (parseFloat(saldoDisplay.innerText) - total).toFixed(2);
@@ -249,5 +279,5 @@ function mostrarTicket(id, total) {
 
 function cerrarTicket() {
     document.getElementById('modal-ticket').style.display = 'none';
-    cargarProductos();
+    cargarProductos(); // Refrescar stock visualmente
 }

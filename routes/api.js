@@ -46,6 +46,11 @@ router.post('/comprar', (req, res) => {
 
     const { carrito, total } = req.body;
 
+    const totalPiezas = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+    if (totalPiezas > 100) {
+        return res.status(400).send("Límite excedido: No puedes comprar más de 100 piezas por pedido.");
+    }
+
     // 1. Verificar saldo del usuario
     db.query('SELECT saldo FROM clientes WHERE id_usuario = ?', [req.session.userId], (err, users) => {
         if (err) return res.status(500).send(err);
@@ -78,6 +83,22 @@ router.post('/comprar', (req, res) => {
 });
 
 // --- RUTAS DE ADMINISTRADOR (CRUD PROTEGIDO) ---
+router.get('/historial', (req, res) => {
+    if (req.session.rol !== 'admin') return res.status(403).send("Acceso denegado");
+
+    // Traemos fecha, nombre del cliente y total
+    const sql = `
+        SELECT p.id, c.nombre, p.fecha, p.total 
+        FROM pedidos p 
+        JOIN clientes c ON p.id_cliente = c.id_usuario 
+        ORDER BY p.fecha DESC
+    `;
+
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+});
 
 // 1. CREAR Producto
 router.post('/productos', (req, res) => {

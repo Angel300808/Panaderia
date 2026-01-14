@@ -45,8 +45,15 @@
 
         <div class="container">
             <section id="productos">
+
                 <div id="admin-panel" style="display:none;" class="card-registro">
                     <h3 style="color: var(--rojo-oscuro); margin-top:0;">👨‍🍳 Gestión del Horno (Admin)</h3>
+
+                    <button onclick="verHistorial()" class="btn-login"
+                        style="background-color: #3498db; width: 100%; margin-bottom: 15px;">
+                        📜 Ver Historial de Ventas
+                    </button>
+                    <hr style="border-color: var(--cafe-tierra); margin-bottom: 20px;">
 
                     <input type="hidden" id="prod-id">
                     <div
@@ -61,7 +68,6 @@
                         <button onclick="guardarProducto()" class="btn-login">💾 Guardar Pan</button>
                         <button onclick="limpiarFormularioAdmin()" class="btn-logout">🧹 Limpiar</button>
                     </div>
-                    <hr style="border-color: var(--cafe-tierra); margin-top: 20px;">
                 </div>
 
                 <h2>Pan de Temporada</h2>
@@ -102,13 +108,21 @@
             <ul id="ticket-productos"></ul>
             <hr>
             <h4>TOTAL: $<span id="ticket-total"></span></h4>
-            <button onclick="cerrarTicket()">Cerrar</button>
+            <button onclick="cerrarTicket()" class="btn-logout">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modal-historial" class="modal">
+        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+            <h3 style="color: var(--azul-noche);">📜 Historial de Ventas</h3>
+            <ul id="lista-historial" style="list-style: none; padding: 0; text-align: left;">
+            </ul>
+            <button onclick="cerrarHistorial()" class="btn-logout" style="margin-top: 20px;">Cerrar Historial</button>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="main.js"></script>
-    <script src="map.js"></script>
 </body>
 
 </html>
