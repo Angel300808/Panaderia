@@ -43,6 +43,8 @@ function cerrarRegistro() { document.getElementById('modal-registro').style.disp
 window.onclick = function (event) {
     if (event.target == document.getElementById('modal-registro')) cerrarRegistro();
     if (event.target == document.getElementById('modal-ticket')) cerrarTicket();
+    // También cerramos el historial si dan clic fuera
+    if (event.target == document.getElementById('modal-historial')) cerrarHistorial();
 }
 
 /* --- 4. CARGA DE PRODUCTOS (LÓGICA DE BOTONES) --- */
@@ -142,7 +144,7 @@ function registrarUsuario() {
     }).then(res => res.text()).then(msg => { alert(msg); cerrarRegistro(); });
 }
 
-/* --- 6. FUNCIONES DE ADMIN --- */
+/* --- 6. FUNCIONES DE ADMIN (PRODUCTOS) --- */
 
 function guardarProducto() {
     const id = document.getElementById('prod-id').value;
@@ -207,7 +209,42 @@ function limpiarFormularioAdmin() {
     document.getElementById('prod-img').value = '';
 }
 
-/* --- 7. CARRITO Y PAGOS (Clientes) --- */
+/* --- 7. FUNCIONES DE ADMIN (HISTORIAL - NUEVO) --- */
+
+function verHistorial() {
+    fetch('/api/historial')
+        .then(res => {
+            if (!res.ok) throw new Error("Error al obtener historial (¿Eres admin?)");
+            return res.json();
+        })
+        .then(pedidos => {
+            const lista = document.getElementById('lista-historial');
+            lista.innerHTML = ''; // Limpiar lista anterior
+
+            if (pedidos.length === 0) {
+                lista.innerHTML = '<li>No hay ventas registradas aún.</li>';
+            } else {
+                pedidos.forEach(p => {
+                    const fecha = new Date(p.fecha).toLocaleString();
+                    lista.innerHTML += `
+                    <li style="border-bottom: 1px solid #ddd; padding: 10px; margin-bottom: 5px;">
+                        <b>Ticket #${p.id}</b> <br>
+                        👤 Cliente: ${p.nombre} <br>
+                        💰 Total: $${p.total} <br>
+                        📅 Fecha: ${fecha}
+                    </li>`;
+                });
+            }
+            document.getElementById('modal-historial').style.display = 'block';
+        })
+        .catch(err => alert(err.message));
+}
+
+function cerrarHistorial() {
+    document.getElementById('modal-historial').style.display = 'none';
+}
+
+/* --- 8. CARRITO Y PAGOS (Clientes) --- */
 function agregarFondos() {
     const input = document.getElementById('monto-fondos');
     const monto = parseFloat(input.value);
@@ -215,7 +252,6 @@ function agregarFondos() {
         fetch('/api/fondos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ monto }) })
             .then(() => {
                 alert("Fondos agregados");
-                // Actualizar visualmente sin recargar
                 const saldoDisplay = document.getElementById('display-saldo');
                 saldoDisplay.innerText = (parseFloat(saldoDisplay.innerText) + monto).toFixed(2);
                 input.value = '';
@@ -246,7 +282,7 @@ function procesarCompra() {
     const total = parseFloat(document.getElementById('total-carrito').innerText);
     if (carrito.length === 0) return alert("Carrito vacío");
 
-    // VALIDACIÓN: Límite de 100 piezas (Requisito mencionado anteriormente)
+    // VALIDACIÓN: Límite de 100 piezas
     const totalPiezas = carrito.reduce((acc, item) => acc + item.cantidad, 0);
     if (totalPiezas > 100) return alert("⚠️ ¡Alto ahí! Máximo 100 piezas por pedido.");
 
@@ -255,7 +291,6 @@ function procesarCompra() {
         .then(data => {
             mostrarTicket(data.num_venta, total);
 
-            // Restar saldo visualmente
             const saldoDisplay = document.getElementById('display-saldo');
             saldoDisplay.innerText = (parseFloat(saldoDisplay.innerText) - total).toFixed(2);
 
@@ -279,5 +314,5 @@ function mostrarTicket(id, total) {
 
 function cerrarTicket() {
     document.getElementById('modal-ticket').style.display = 'none';
-    cargarProductos(); // Refrescar stock visualmente
+    cargarProductos();
 }
